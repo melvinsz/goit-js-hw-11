@@ -12,6 +12,7 @@ const ref = {
 };
 
 const BASE_URL = 'https://pixabay.com/api/';
+ref.loadMore.style.display = 'none';
 
 ref.searchBtn.addEventListener('click', onSearchClick);
 
@@ -23,55 +24,65 @@ function onSearchClick(e) {
       .then(cards => {
         if (cards.length > 0) {
           renderMarkup(cards);
+          ref.loadMore.style.display = 'block';
         } else {
           Notiflix.Notify.failure(
             'Sorry, there are no images matching your search query. Please try again.'
           );
-          ref.gallery.innerHTML = '';
+          updateMarkup();
         }
       })
       .catch(error => {
         Notiflix.Notify.failure('Oops, something went wrong');
       });
   } else {
-    ref.gallery.innerHTML = '';
+    updateMarkup();
   }
 }
 
-function fetchPictures(name) {
-  return axios
+async function fetchPictures(name) {
+  return await axios
     .get(
       `${BASE_URL}?key=34746416-8804c3e057cfbf229fa5fe7fd&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&`
     )
     .then(response => response.data.hits);
 }
 
-function renderMarkup(card) {
-  const {
-    webformatURL,
-    largeImageURL,
-    tags,
-    likes,
-    views,
-    comments,
-    downloads,
-  } = card;
-  const markup = `<div class="photo-card">
-  <img src="${largeImageURL}" alt="${tags}" loading="lazy" />
+function renderMarkup(cards) {
+  const markup = cards
+    .map(card => {
+      const {
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      } = card;
+      return `<div class="photo-card">
+  <img src="${largeImageURL}" alt="${tags}" loading="lazy"/>
   <div class="info">
     <p class="info-item">
-      <b>${likes}</b>
+      <b>Likes <span class='api-value'>${likes}</span></b>
     </p>
     <p class="info-item">
-      <b>${views}</b>
+      <b>Views <span class='api-value'>${views}</span></b>
     </p>
     <p class="info-item">
-      <b>${comments}</b>
+      <b>Comments <span class='api-value'>${comments}</span></b>
     </p>
     <p class="info-item">
-      <b>${downloads}</b>
+      <b>Downloads <span class='api-value'>${downloads}</span></b>
     </p>
   </div>
 </div>`;
+    })
+    .join('');
   ref.gallery.innerHTML = markup;
+}
+
+function updateMarkup() {
+  ref.gallery.innerHTML = '';
+  ref.loadMore.style.display = 'none';
 }
