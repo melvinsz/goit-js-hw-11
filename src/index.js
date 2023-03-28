@@ -117,11 +117,3 @@ function updateMarkup() {
   ref.gallery.innerHTML = '';
   ref.loadMore.style.display = 'none';
 }
-const { height: cardHeight } = document
-  .querySelector('.gallery')
-  .firstElementChild.getBoundingClientRect();
-
-window.scrollBy({
-  top: cardHeight * 2,
-  behavior: 'smooth',
-});
