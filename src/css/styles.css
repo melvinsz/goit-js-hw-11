@@ -79,4 +79,9 @@ body {
 .info,
 .api-value {
   display: flex;
+  text-align: center;
+  justify-content: center;
+}
+.info-item:not(:last-child) {
+  margin-right: 10px;
 }

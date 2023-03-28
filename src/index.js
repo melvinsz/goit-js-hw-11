@@ -6,24 +6,29 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const ref = {
   searchInput: document.querySelector('[name=searchQuery]'),
-  searchBtn: document.querySelector('.search-btn'),
+  searchForm: document.querySelector('.search-form'),
   gallery: document.querySelector('.gallery'),
   loadMore: document.querySelector('.load-more'),
 };
-
 const BASE_URL = 'https://pixabay.com/api/';
 ref.loadMore.style.display = 'none';
+let page = 1;
+let currentQuery = '';
 
-ref.searchBtn.addEventListener('click', onSearchClick);
+ref.searchForm.addEventListener('submit', onSearchClick);
 
 function onSearchClick(e) {
   e.preventDefault();
-  const name = ref.searchInput.value.trim();
-  if (name !== '') {
-    fetchPictures(name)
-      .then(cards => {
-        if (cards.length > 0) {
-          renderMarkup(cards);
+  const query = ref.searchInput.value.trim();
+  if (query !== '') {
+    page = 1;
+    currentQuery = query;
+    fetchPictures(currentQuery)
+      .then(data => {
+        const { totalHits, hits } = data;
+        if (hits.length > 0) {
+          renderMarkup(hits);
+          Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
           ref.loadMore.style.display = 'block';
         } else {
           Notiflix.Notify.failure(
@@ -40,12 +45,12 @@ function onSearchClick(e) {
   }
 }
 
-async function fetchPictures(name) {
-  return await axios
-    .get(
-      `${BASE_URL}?key=34746416-8804c3e057cfbf229fa5fe7fd&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&`
-    )
-    .then(response => response.data.hits);
+async function fetchPictures(query) {
+  const perPage = 40;
+  const response = await axios.get(
+    `${BASE_URL}?key=34746416-8804c3e057cfbf229fa5fe7fd&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`
+  );
+  return ({ totalHits, hits } = response.data);
 }
 
 function renderMarkup(cards) {
@@ -61,7 +66,7 @@ function renderMarkup(cards) {
         downloads,
       } = card;
       return `<div class="photo-card">
-  <img src="${largeImageURL}" alt="${tags}" loading="lazy"/>
+  <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
   <div class="info">
     <p class="info-item">
       <b>Likes <span class='api-value'>${likes}</span></b>
@@ -79,10 +84,44 @@ function renderMarkup(cards) {
 </div>`;
     })
     .join('');
-  ref.gallery.innerHTML = markup;
+  if (page === 1) {
+    ref.gallery.innerHTML = markup;
+  } else {
+    ref.gallery.insertAdjacentHTML('beforeend', markup);
+  }
+}
+
+ref.loadMore.addEventListener('click', onMoreClick);
+
+function onMoreClick(e) {
+  e.preventDefault();
+  page += 1;
+  fetchPictures(currentQuery)
+    .then(data => {
+      const { totalHits, hits } = data;
+      renderMarkup(hits);
+      const cardsCount = document.querySelectorAll('.photo-card').length;
+      if (cardsCount >= totalHits) {
+        ref.loadMore.style.display = 'none';
+        Notiflix.Notify.info(
+          "We're sorry, but you've reached the end of search results."
+        );
+      }
+    })
+    .catch(error => {
+      Notiflix.Notify.failure('Oops, something went wrong');
+    });
 }
 
 function updateMarkup() {
   ref.gallery.innerHTML = '';
   ref.loadMore.style.display = 'none';
 }
+const { height: cardHeight } = document
+  .querySelector('.gallery')
+  .firstElementChild.getBoundingClientRect();
+
+window.scrollBy({
+  top: cardHeight * 2,
+  behavior: 'smooth',
+});
