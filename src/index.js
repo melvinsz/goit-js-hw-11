@@ -53,10 +53,47 @@ async function fetchPictures(query) {
   return ({ totalHits, hits } = response.data);
 }
 
+// function renderMarkup(cards) {
+//   const markup = cards
+//     .map(card => {
+//       const {
+//         webformatURL,
+//         largeImageURL,
+//         tags,
+//         likes,
+//         views,
+//         comments,
+//         downloads,
+//       } = card;
+//       return `<div class="photo-card">
+//   <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
+//   <div class="info">
+//     <p class="info-item">
+//       <b>Likes <span class='api-value'>${likes}</span></b>
+//     </p>
+//     <p class="info-item">
+//       <b>Views <span class='api-value'>${views}</span></b>
+//     </p>
+//     <p class="info-item">
+//       <b>Comments <span class='api-value'>${comments}</span></b>
+//     </p>
+//     <p class="info-item">
+//       <b>Downloads <span class='api-value'>${downloads}</span></b>
+//     </p>
+//   </div>
+// </div>`;
+//     })
+//     .join('');
+//   if (page === 1) {
+//     ref.gallery.innerHTML = markup;
+//   } else {
+//     ref.gallery.insertAdjacentHTML('beforeend', markup);
+//   }
+// }
 function renderMarkup(cards) {
   const markup = cards
-    .map(card => {
-      const {
+    .map(
+      ({
         webformatURL,
         largeImageURL,
         tags,
@@ -64,8 +101,8 @@ function renderMarkup(cards) {
         views,
         comments,
         downloads,
-      } = card;
-      return `<div class="photo-card">
+      }) => {
+        return `<div class="photo-card">
   <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
   <div class="info">
     <p class="info-item">
@@ -82,7 +119,8 @@ function renderMarkup(cards) {
     </p>
   </div>
 </div>`;
-    })
+      }
+    )
     .join('');
   if (page === 1) {
     ref.gallery.innerHTML = markup;
