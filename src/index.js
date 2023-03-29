@@ -148,6 +148,8 @@ function onMoreClick(e) {
     })
     .catch(error => {
       Notiflix.Notify.failure('Oops, something went wrong');
+      console.log(error);
+      console.log(message);
     });
 }
 
