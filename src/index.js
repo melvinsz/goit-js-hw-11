@@ -57,7 +57,7 @@ async function fetchPictures(query) {
     page: page,
   };
   const response = await axios.get(BASE_URL, { params });
-  return ({ totalHits, hits } = response.data);
+  return response.data;
 }
 
 // async function fetchPictures(query) {
