@@ -71,20 +71,29 @@ async function fetchPictures(query) {
 function renderMarkup(cards) {
   const markup = cards
     .map(card => {
+      const {
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      } = card;
       return `<div class="photo-card">
-    <img src="${card.webformatURL}" alt="${card.tags}" loading="lazy"/>
+    <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
     <div class="info">
       <p class="info-item">
-        <b>Likes <span class='api-value'>${card.likes}</span></b>
+        <b>Likes <span class='api-value'>${likes}</span></b>
       </p>
       <p class="info-item">
-        <b>Views <span class='api-value'>${card.views}</span></b>
+        <b>Views <span class='api-value'>${views}</span></b>
       </p>
       <p class="info-item">
-        <b>Comments <span class='api-value'>${card.comments}</span></b>
+        <b>Comments <span class='api-value'>${comments}</span></b>
       </p>
       <p class="info-item">
-        <b>Downloads <span class='api-value'>${card.downloads}</span></b>
+        <b>Downloads <span class='api-value'>${downloads}</span></b>
       </p>
     </div>
   </div>`;
