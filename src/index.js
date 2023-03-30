@@ -81,22 +81,22 @@ function renderMarkup(cards) {
         downloads,
       } = card;
       return `<div class="photo-card">
-  <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
-  <div class="info">
-    <p class="info-item">
-      <b>Likes <span class='api-value'>${likes}</span></b>
-    </p>
-    <p class="info-item">
-      <b>Views <span class='api-value'>${views}</span></b>
-    </p>
-    <p class="info-item">
-      <b>Comments <span class='api-value'>${comments}</span></b>
-    </p>
-    <p class="info-item">
-      <b>Downloads <span class='api-value'>${downloads}</span></b>
-    </p>
-  </div>
-</div>`;
+    <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
+    <div class="info">
+      <p class="info-item">
+        <b>Likes <span class='api-value'>${likes}</span></b>
+      </p>
+      <p class="info-item">
+        <b>Views <span class='api-value'>${views}</span></b>
+      </p>
+      <p class="info-item">
+        <b>Comments <span class='api-value'>${comments}</span></b>
+      </p>
+      <p class="info-item">
+        <b>Downloads <span class='api-value'>${downloads}</span></b>
+      </p>
+    </div>
+  </div>`;
     })
     .join('');
   if (page === 1) {
