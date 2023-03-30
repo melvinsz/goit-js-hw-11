@@ -104,7 +104,6 @@ function renderMarkup(cards) {
   } else {
     ref.gallery.insertAdjacentHTML('beforeend', markup);
   }
-  ref.gallery.insertAdjacentHTML('beforeend', cards);
 }
 
 ref.loadMore.addEventListener('click', onMoreClick);
