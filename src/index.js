@@ -10,7 +10,7 @@ const ref = {
   gallery: document.querySelector('.gallery'),
   loadMore: document.querySelector('.load-more'),
 };
-const BASE_URL = 'https://pixabay.com/api';
+const BASE_URL = 'https://pixabay.com/api/';
 ref.loadMore.style.display = 'none';
 let page = 1;
 let currentQuery = '';
@@ -47,11 +47,26 @@ function onSearchClick(e) {
 
 async function fetchPictures(query) {
   const perPage = 40;
-  const response = await axios.get(
-    `${BASE_URL}?key=34746416-8804c3e057cfbf229fa5fe7fd&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`
-  );
+  const params = {
+    key: '34746416-8804c3e057cfbf229fa5fe7fd',
+    q: query,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true,
+    per_page: perPage,
+    page: page,
+  };
+  const response = await axios.get(BASE_URL, { params });
   return ({ totalHits, hits } = response.data);
 }
+
+// async function fetchPictures(query) {
+//   const perPage = 40;
+//   const response = await axios.get(
+//     `${BASE_URL}?key=34746416-8804c3e057cfbf229fa5fe7fd&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`
+//   );
+//   return ({ totalHits, hits } = response.data);
+// }
 
 function renderMarkup(cards) {
   const markup = cards
