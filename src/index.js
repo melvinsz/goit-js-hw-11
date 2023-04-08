@@ -45,28 +45,28 @@ function onSearchClick(e) {
   }
 }
 
-async function fetchPictures(query) {
-  const perPage = 40;
-  const params = {
-    key: '34746416-8804c3e057cfbf229fa5fe7fd',
-    q: query,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: true,
-    per_page: perPage,
-    page: page,
-  };
-  const response = await axios.get(BASE_URL, { params });
-  return response.data;
-}
-
 // async function fetchPictures(query) {
 //   const perPage = 40;
-//   const response = await axios.get(
-//     `${BASE_URL}?key=34746416-8804c3e057cfbf229fa5fe7fd&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`
-//   );
-//   return ({ totalHits, hits } = response.data);
+//   const params = {
+//     key: '34746416-8804c3e057cfbf229fa5fe7fd',
+//     q: query,
+//     image_type: 'photo',
+//     orientation: 'horizontal',
+//     safesearch: true,
+//     per_page: perPage,
+//     page: page,
+//   };
+//   const response = await axios.get(BASE_URL, { params });
+//   return response.data;
 // }
+
+async function fetchPictures(query) {
+  const perPage = 40;
+  const response = await axios.get(
+    `${BASE_URL}?key=34746416-8804c3e057cfbf229fa5fe7fd&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${perPage}&page=${page}`
+  );
+  return ({ totalHits, hits } = response.data);
+}
 
 function renderMarkup(cards) {
   const markup = cards
